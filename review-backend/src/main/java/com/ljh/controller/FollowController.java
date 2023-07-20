@@ -1,6 +1,7 @@
 package com.ljh.controller;
 
 
+import com.ljh.annotation.HotCheck;
 import com.ljh.dto.Result;
 import com.ljh.service.IFollowService;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ public class FollowController {
 
     //关注，取消关注用户功能
     @PutMapping("/{id}/{isFollow}")
+    @HotCheck
     public Result follow(@PathVariable("id") Long followUserId, @PathVariable("isFollow") Boolean isFollow){
 
         return followService.follow(followUserId, isFollow);
@@ -33,6 +35,7 @@ public class FollowController {
     }
 
     @GetMapping("/common/{id}")
+    @HotCheck
     public Result commonUser(@PathVariable("id") Long id){
 
 

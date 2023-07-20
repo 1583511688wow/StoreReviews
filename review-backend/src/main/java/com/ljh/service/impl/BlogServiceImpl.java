@@ -2,6 +2,7 @@ package com.ljh.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljh.dto.Result;
 import com.ljh.dto.ScrollResult;
@@ -16,19 +17,16 @@ import com.ljh.service.IFollowService;
 import com.ljh.service.IUserService;
 import com.ljh.utils.SystemConstants;
 import com.ljh.utils.UserHolder;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.ljh.utils.RedisConstants.BLOG_LIKED_KEY;
-import static com.ljh.utils.RedisConstants.FEED_KEY;
+import static com.ljh.utils.RedisConstants.*;
 
 
 @Service
@@ -42,6 +40,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
 
     @Resource
     public IFollowService followService;
+
+    @Resource
+    public BlogMapper blogMapper;
 
 
     //查看博客，根据博客ID查询，但只有用户id信息
@@ -89,9 +90,25 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
     }
 
 
-    //分页查询
+
     @Override
     public Result queryHotBlog(Integer current) {
+
+        String blogList = stringRedisTemplate.opsForValue().get(BLOG_HOT_KEY);
+        if (StringUtils.isNotBlank(blogList)){
+
+            List<Blog> blogs = JSONUtil.toList(blogList, Blog.class);
+            blogs.forEach(blog -> {
+
+                this.queryBlogUser(blog);
+                this.isBlogLiked(blog);
+            });
+
+
+            return Result.ok(blogs);
+
+        }
+
         // 根据用户查询
         Page<Blog> page = query()
                 .orderByDesc("liked")
@@ -104,8 +121,15 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
             this.isBlogLiked(blog);
 
         });
+
+
+
+
         return Result.ok(records);
     }
+
+
+
 
 
 

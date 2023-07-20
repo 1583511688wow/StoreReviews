@@ -24,4 +24,12 @@ public class VoucherOrderController {
 
         return voucherOrderService.seckillVoucher(voucherId);
     }
+
+    @PostMapping("seckilltest/{id}")
+    public Result seckillVoucherTest(@PathVariable("id") Long voucherId) {
+
+        return voucherOrderService.seckillVoucherTest(voucherId);
+    }
+
+
 }

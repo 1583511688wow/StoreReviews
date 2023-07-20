@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Slf4j
@@ -57,7 +58,12 @@ public class UploadController {
         if (!dir.exists()) {
             dir.mkdirs();
         }
+
+
         // 生成文件名
         return StrUtil.format("/blogs/{}/{}/{}.{}", d1, d2, name, suffix);
+
+
+
     }
 }

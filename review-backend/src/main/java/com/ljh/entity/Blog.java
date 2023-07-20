@@ -85,4 +85,10 @@ public class Blog implements Serializable {
     private LocalDateTime updateTime;
 
 
+    /**
+     * 热点分值
+     */
+    private Integer score;
+
+
 }

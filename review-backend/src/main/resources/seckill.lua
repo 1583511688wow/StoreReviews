@@ -40,7 +40,7 @@ redis.call('incrby', stockKey, -1)
 redis.call('sadd', orderKey, userId)
 
 --3.5 发送消息到队列中, XADD stream.orders * k1 v1 k2 v2 ...
-redis.call('xadd', 'stream.orders', '*', 'userId', userId, 'voucherId', voucherId, 'id', orderId)
+--redis.call('xadd', 'stream.orders', '*', 'userId', userId, 'voucherId', voucherId, 'id', orderId)
 
 
 

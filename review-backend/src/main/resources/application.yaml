@@ -9,7 +9,7 @@ spring:
     username: root
     password: 111111
   redis:
-    host: 192.168.123.5
+    host: 192.168.123.6
     port: 6379
     password: 12052497
     lettuce:
@@ -18,6 +18,19 @@ spring:
         max-idle: 10
         min-idle: 1
         time-between-eviction-runs: 10s
+  rabbitmq:
+    host: 192.168.123.6 # 主机名
+    port: 5672 # 端口
+    virtual-host: / # 虚拟主机
+    username: itcast # 用户名
+    password: 12052497 # 密码
+    listener:
+      simple:
+        prefetch: 1 # 每次只能获取一条消息，处理完成才能获取下一个消息
+        concurrency: 10
+        max-concurrency: 10
+        auto-startup: true
+
   jackson:
     default-property-inclusion: non_null # JSON处理时忽略非空字段
 mybatis-plus:
